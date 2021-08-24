@@ -1,111 +1,95 @@
 "use strict";
-function getRandom(min = 0, max = 10) {
-  return Math.round(Math.random() * (max - min) + min);
+function gameRandom() {
+  function numberGenerate() {
+    function getRandom(min = 0, max = 9) {
+      return Math.round(Math.random() * (max - min) + min);
+    }
+    let arr = [];
+    for (let i = 0; i < 4; i++) {
+      arr[i] = getRandom();
+      if (i == 0) while (arr[i] == 0) arr[i] = getRandom();
+      else {
+        let bool;
+        do {
+          bool = true;
+          for (let j = 0; j < i; j++) {
+            if (arr[j] == arr[i]) {
+              bool = false;
+              arr[i] = getRandom();
+              break;
+            }
+          }
+        } while (!bool);
+      }
+    }
+    return arr;
+  } //return arr
+  function inputVerification() {
+    let arrGuess,
+      rider = "";
+    while (true) {
+      arrGuess = prompt(`${rider}Введите 4-х значное число:`);
+      if (arrGuess === null) {
+        console.log("Отмена ввода");
+        return false;
+      } else if (isNaN(+arrGuess) || arrGuess.split("").length != 4) {
+        rider = "Неправильный ввод. ";
+        continue;
+      }
+      return arrGuess.split("").map(Number);
+    }
+  } //return arrGuess or false
+  function Guess(arrGenerate) {
+    let arrGuess = inputVerification();
+    if (!arrGuess) return true;
+    let cow = 0,
+      bull = 0,
+      boo = true,
+      rider;
+    for (let i = 0; i < arrGuess.length; i++) {
+      if (arrGuess[i] == arrGenerate[i]) ++cow;
+      else {
+        if (arrGenerate.includes(arrGuess[i])) bull++;
+        if (boo) {
+          boo = false;
+          if (arrGuess[i] < arrGenerate[i]) rider = "МЕНЬШЕ";
+          else rider = "БОЛЬШЕ";
+        }
+      }
+    }
+    if (cow == 4) {
+      console.log("Вы угадали");
+      return true;
+    } else {
+      count--;
+      console.log(
+        `Вы не угадали. Осталось ${count} попыток. Ваше число ${rider} загаданного. Коров: ${cow}, а Быков ${bull}`
+      );
+      if (count) return false;
+      else return true;
+    }
+  } //return true or false
+  const arrGenerate = numberGenerate();
+  let count = 50;
+  while (!Guess(arrGenerate));
+  return;
 }
-function gameRandom(x = getRandom()) {
-  let i = prompt("Ваше число:");
-  if (i == x) console.log("Вы выйграли");
-  else if (i > x) {
-    console.log("x меньше вашего числа, пробуйте ещё!");
-    gameRandom(x);
-  } else if (i < x) {
-    console.log("x больше вашего числа, пробуйте ещё!");
-    gameRandom(x);
+function hundredOutput() {
+  let i = 0;
+  while (i <= 100) console.log(i++);
+}
+function forNone() {
+  for (let i = 0; i < 10; console.log(i++));
+}
+function pyramidX() {
+  for (let i = 0, x = ""; i < 20; i++, console.log((x += "x")));
+}
+function countBasketPrice(arrQuantity, arrPrice) {
+  let 
+    countBasket = 0;
+  for (let i = 0; i < arrQuantity.length; i++) {
+    countBasket += (arrQuantity[i] * arrPrice[i]);
   }
+  return countBasket;
 }
-function game() {
-  if (confirm("Отгадаешь число от 0 до 10?")) gameRandom();
-}
-function znaki() {
-  let a = -5,
-    b = -3;
-  if (a >= 0 && b >= 0) console.log(a - b);
-  else if (a < 0 && b < 0) console.log(a * b);
-  else console.log(a / b);
-}
-function perecluchatel() {
-  let a = getRandom(0, 15);
-  switch (a) {
-    case 0:
-      console.log("0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15");
-      break;
-    case 1:
-      console.log("1 2 3 4 5 6 7 8 9 10 11 12 13 14 15");
-      break;
-    case 2:
-      console.log("2 3 4 5 6 7 8 9 10 11 12 13 14 15");
-      break;
-    case 3:
-      console.log("3 4 5 6 7 8 9 10 11 12 13 14 15");
-      break;
-    case 4:
-      console.log("4 5 6 7 8 9 10 11 12 13 14 15");
-      break;
-    case 5:
-      console.log("5 6 7 8 9 10 11 12 13 14 15");
-      break;
-    case 6:
-      console.log("6 7 8 9 10 11 12 13 14 15");
-      break;
-    case 7:
-      console.log("7 8 9 10 11 12 13 14 15");
-      break;
-    case 8:
-      console.log("8 9 10 11 12 13 14 15");
-      break;
-    case 9:
-      console.log("9 10 11 12 13 14 15");
-      break;
-    case 10:
-      console.log("10 11 12 13 14 15");
-      break;
-    case 11:
-      console.log("11 12 13 14 15");
-      break;
-    case 12:
-      console.log("12 13 14 15");
-      break;
-    case 13:
-      console.log("13 14 15");
-      break;
-    case 14:
-      console.log("14 15");
-      break;
-    case 15:
-      console.log("15");
-      break;
-  }
-}
-function abSum(a, b) {
-  return a + b;
-}
-function abSub(a, b) {
-  return a - b;
-}
-function abMult(a, b) {
-  return a * b;
-}
-function abDiv(a, b) {
-  return a / b;
-}
-function ab(a, b, c) {
-  switch (c) {
-    case "+":
-      return abSum(a, b);
-      break;
-    case "-":
-      return abSub(a, b);
-      break;
-    case "*":
-      return abMult(a, b);
-      break;
-    case "/":
-      return abDiv(a, b);
-      break;
-  }
-}
-function power(val, pow) {
-  if (pow === 1) return val;
-  else return val * power(val, pow - 1);
-}
-console.log(power(27, 3));
+console.log(countBasketPrice([2,1],[3,2]))
