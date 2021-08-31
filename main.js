@@ -1,95 +1,52 @@
 "use strict";
-function gameRandom() {
-  function numberGenerate() {
-    function getRandom(min = 0, max = 9) {
-      return Math.round(Math.random() * (max - min) + min);
-    }
-    let arr = [];
-    for (let i = 0; i < 4; i++) {
-      arr[i] = getRandom();
-      if (i == 0) while (arr[i] == 0) arr[i] = getRandom();
-      else {
-        let bool;
-        do {
-          bool = true;
-          for (let j = 0; j < i; j++) {
-            if (arr[j] == arr[i]) {
-              bool = false;
-              arr[i] = getRandom();
-              break;
-            }
-          }
-        } while (!bool);
-      }
-    }
-    return arr;
-  } //return arr
-  function inputVerification() {
-    let arrGuess,
-      rider = "";
-    while (true) {
-      arrGuess = prompt(`${rider}Введите 4-х значное число:`);
-      if (arrGuess === null) {
-        console.log("Отмена ввода");
-        return false;
-      } else if (isNaN(+arrGuess) || arrGuess.split("").length != 4) {
-        rider = "Неправильный ввод. ";
-        continue;
-      }
-      return arrGuess.split("").map(Number);
-    }
-  } //return arrGuess or false
-  function Guess(arrGenerate) {
-    let arrGuess = inputVerification();
-    if (!arrGuess) return true;
-    let cow = 0,
-      bull = 0,
-      boo = true,
-      rider;
-    for (let i = 0; i < arrGuess.length; i++) {
-      if (arrGuess[i] == arrGenerate[i]) ++cow;
-      else {
-        if (arrGenerate.includes(arrGuess[i])) bull++;
-        if (boo) {
-          boo = false;
-          if (arrGuess[i] < arrGenerate[i]) rider = "МЕНЬШЕ";
-          else rider = "БОЛЬШЕ";
-        }
-      }
-    }
-    if (cow == 4) {
-      console.log("Вы угадали");
-      return true;
-    } else {
-      count--;
-      console.log(
-        `Вы не угадали. Осталось ${count} попыток. Ваше число ${rider} загаданного. Коров: ${cow}, а Быков ${bull}`
-      );
-      if (count) return false;
-      else return true;
-    }
-  } //return true or false
-  const arrGenerate = numberGenerate();
-  let count = 50;
-  while (!Guess(arrGenerate));
-  return;
-}
-function hundredOutput() {
-  let i = 0;
-  while (i <= 100) console.log(i++);
-}
-function forNone() {
-  for (let i = 0; i < 10; console.log(i++));
-}
-function pyramidX() {
-  for (let i = 0, x = ""; i < 20; i++, console.log((x += "x")));
-}
-function countBasketPrice(arrQuantity, arrPrice) {
-  let 
-    countBasket = 0;
-  for (let i = 0; i < arrQuantity.length; i++) {
-    countBasket += (arrQuantity[i] * arrPrice[i]);
+function numberUnits(a) {
+  if (a > 999 || a < 0 || a % 1 != 0 || typeof a != "number") {
+    console.log("Неверное число");
+    return {};
   }
-  return countBasket;
+  let arr = ["Еденицы", "Десятки", "Сотни"],
+    objUnits = {};
+  for (let i = 0, divider = 10; i < arr.length; i++) {
+    objUnits[arr[i]] = a % divider;
+    a = Math.floor(a / divider);
+  }
+  return objUnits;
 }
-console.log(countBasketPrice([2,1],[3,2]))
+//
+
+let productCatalog = {
+  products: [{ name: "apple", price: 5 }],
+  Product: function (name, price) {
+    this.name = name;
+    this.price = price;
+  },
+  addProduct(name, price) {
+    this.products.push(new this.Product(name, price));
+  },
+  returnPrice(name) {
+    return this.products.find((item) => item.name == name).price;
+  },
+};
+productCatalog.addProduct("banana", 12);
+productCatalog.addProduct("tomat", 7);
+
+
+//
+let productBusket = {
+  basket: {},
+  addToBasket(name, count) {
+    this.basket[name] = count;
+  },
+  countBasketPrice() {
+    let countBasket = 0;
+    for (let name in this.basket) {
+      countBasket += this.basket[name] * productCatalog.returnPrice(name);
+    }
+    return countBasket;
+  },
+};
+productBusket.addToBasket("apple", 3);
+productBusket.addToBasket("banana", 1);
+
+/*console.log(productBusket);
+console.log(productBusket.countBasketPrice());*/
