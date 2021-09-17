@@ -1,0 +1,8 @@
+.market-place{
+  display: flex;
+  justify-content: space-between;
+  color: aqua;
+}
+.text__title{
+  font-family: Verdana, Geneva, Tahoma, sans-serif; font-size: 20px;
+}
